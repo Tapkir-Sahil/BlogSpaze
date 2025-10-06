@@ -58,9 +58,9 @@ const Navbar = () => {
         </div>
 
         {/* Pencil Icon */}
-        <button className="btn btn-outline-dark me-1">
+        <Link to="/writeblog" className="btn btn-outline-dark me-1">
           <i className="bi bi-pencil"></i>
-        </button>
+        </Link>
 
         {/* Profile Dropdown */}
         <div className="dropdown">
