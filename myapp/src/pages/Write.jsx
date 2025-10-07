@@ -1,59 +1,105 @@
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "../App.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Write.css";
 
-const Write = () => {
+const Write = ({ addPost }) => {
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [content, setContent] = useState("");
+  const [popup, setPopup] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // create new post object
+    const newPost = {
+      id: Date.now(),
+      title,
+      description: desc,
+      content,
+      author: "Tom Holland",
+      date: new Date().toLocaleDateString(),
+      likes: 0,
+      comments: 0,
+      image: "https://picsum.photos/700/400?random=1",
+    };
+
+    addPost(newPost); // update local posts (works even before JSON Server)
+
+    // show popup
+    setPopup(true);
+
+    // redirect after 3 seconds
+    setTimeout(() => {
+      setPopup(false);
+      navigate("/");
+    }, 3000);
+  };
+
   return (
-    <div className="container mt-4" style={{ maxWidth: "800px" }}>
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <p className="text-muted mb-0">Added in Draft</p>
-        <div className="d-flex align-items-center text-muted">
-          <i className="bi bi-lock me-1"></i>
-          <span>Follower Only</span>
+    <div className="write-page">
+      <form className="write-container" onSubmit={handleSubmit}>
+        <div className="write-inputs">
+          <input
+            type="text"
+            placeholder="Title"
+            className="write-title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            className="write-desc"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            required
+          />
+          <textarea
+            className="write-textarea"
+            placeholder="Convey those emotions and thoughts..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+          />
         </div>
-      </div>
 
-      {/* Title Input */}
-      <input
-        type="text"
-        className="form-control border-0 fs-2 fw-bold mb-2"
-        placeholder="Title"
-        style={{ boxShadow: "none" }}
-      />
-
-      {/* Description Input */}
-      <input
-        type="text"
-        className="form-control border-0 fs-5 text-secondary mb-3"
-        placeholder="Description"
-        style={{ boxShadow: "none" }}
-      />
-
-      {/* Blog Textarea */}
-      <textarea
-        className="form-control border-0 fs-5 text-secondary mb-5"
-        placeholder="Convey those emotions and thoughts."
-        rows="10"
-        style={{ resize: "none", boxShadow: "none" }}
-      ></textarea>
-
-      {/* Toolbar */}
-      <div
-        className="d-flex justify-content-between align-items-center border rounded-pill py-2 px-3 bg-white shadow-sm"
-        style={{ position: "sticky", bottom: "20px" }}
-      >
-        <div className="d-flex gap-3 fs-5 text-muted">
-          <i className="bi bi-type-bold"></i>
-          <i className="bi bi-type-italic"></i>
-          <i className="bi bi-type-underline"></i>
-          <i className="bi bi-quote"></i>
-          <i className="bi bi-card-image"></i>
-          <i className="bi bi-link-45deg"></i>
-          <i className="bi bi-code-slash"></i>
-          <i className="bi bi-mic"></i>
+        <div className="write-toolbar">
+          <button type="button" className="icon-btn">
+            <b>B</b>
+          </button>
+          <button type="button" className="icon-btn">
+            <i>I</i>
+          </button>
+          <button type="button" className="icon-btn">
+            <u>U</u>
+          </button>
+          <button type="button" className="icon-btn">“ ”</button>
+          <button type="button" className="icon-btn">🖼️</button>
+          <button type="button" className="icon-btn">🔗</button>
+          <button type="button" className="icon-btn">🎙️</button>
         </div>
-        <i className="bi bi-plus-lg fs-5 text-muted"></i>
-      </div>
+
+        <div className="write-actions">
+          <button type="submit" className="submit-btn">Submit</button>
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={() => navigate("/")}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      {popup && (
+        <div className="popup">
+          <p>✅ Blog Posted</p>
+        </div>
+      )}
     </div>
   );
 };

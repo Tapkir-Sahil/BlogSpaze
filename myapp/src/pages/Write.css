@@ -1,0 +1,124 @@
+.write-page {
+  padding: 40px 20%;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+}
+
+.write-draft {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 20px;
+}
+
+.write-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.write-title {
+  font-size: 42px;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  border-left: 4px solid #111;
+  padding-left: 10px;
+}
+
+.write-desc {
+  font-size: 24px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  border-left: 4px solid #111;
+  padding-left: 10px;
+  color: #555;
+}
+
+.write-textarea {
+  font-size: 18px;
+  border: none;
+  outline: none;
+  min-height: 300px;
+  resize: none;
+  color: #333;
+}
+
+.write-toolbar {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-btn:hover {
+  transform: scale(1.2);
+  color: #111;
+}
+
+.write-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.submit-btn,
+.cancel-btn {
+  padding: 10px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.submit-btn {
+  background-color: #111;
+  color: #fff;
+  border: none;
+}
+
+.submit-btn:hover {
+  background-color: #333;
+}
+
+.cancel-btn {
+  border: 1px solid #aaa;
+  background-color: #fff;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.popup {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #111;
+  color: #fff;
+  padding: 16px 28px;
+  border-radius: 8px;
+  font-size: 18px;
+  animation: fadeInOut 3s ease;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -10px); }
+  10% { opacity: 1; transform: translate(-50%, 0); }
+  90% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -10px); }
+}

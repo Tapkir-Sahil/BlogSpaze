@@ -1,39 +1,47 @@
-import React from "react";
-import BlogCard from "../components/BlogCard";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "./Home.css";
 
-const Home = () => {
+const Home = ({ posts = [] }) => {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      setBlogs(posts);
+    } else {
+      const storedBlogs = JSON.parse(localStorage.getItem("blogs")) || [];
+      setBlogs(storedBlogs);
+    }
+  }, [posts]);
+
+
   return (
-    <div className="container my-4">
-      
-      <BlogCard
-        author="Reena Chaturvedi"
-        title="Why Most Programmer Burnt Out After the Age of 40"
-        desc="I’ve been programming since I was 14. It started as a hobby and eventually became my profession."
-        img="/blogspaze_logo.png"
-        views="380"
-        likes="121"
-        comments="12"
-      />
+    <div className="home-container">
+      <h1 className="home-title">📚 Latest Blogs</h1>
 
-      <BlogCard
-        author="Virpalsinh Chavda"
-        title="Coding in the Debugger: A Unique Way to Shorten Your Feedback Loop"
-        desc="I’ve been programming since I was 14. It started as a hobby and eventually became my profession."
-        img="/blogspaze_logo.png"
-        views="1.8k"
-        likes="523"
-        comments="56"
-      />
+      {blogs.length === 0 ? (
+        <p className="no-blogs">No blogs yet. Click “Write” to post one!</p>
+      ) : (
+        <div className="blogs-grid">
+          {blogs.map((blog) => (
+            <div className="blog-card" key={blog.id}>
+              <h2 className="blog-title">{blog.title}</h2>
+              <p className="blog-desc">
+                {blog.description.length > 120
+                  ? blog.description.substring(0, 120) + "..."
+                  : blog.description}
+              </p>
 
-      <BlogCard
-        author="Henry Calvin"
-        title="Coding in the Debugger: A Unique Way to Shorten Your Feedback Loop"
-        desc="I’ve been programming since I was 14. It started as a hobby and eventually became my profession."
-        img="/blogspaze_logo.png"
-        views="1.8k"
-        likes="523"
-        comments="56"
-      />
+              <div className="blog-footer">
+                <span className="blog-date">🗓️ {blog.date}</span>
+                <Link to={`/blog/${blog.id}`} className="read-more">
+                  Read More →
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
