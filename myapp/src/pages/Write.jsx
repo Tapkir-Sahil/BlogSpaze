@@ -19,11 +19,11 @@ const Write = ({ addPost }) => {
       title,
       description: desc,
       content,
-      author: "Tom Holland",
+      author: "Sahil Tapkir",
       date: new Date().toLocaleDateString(),
       likes: 0,
       comments: 0,
-      image: "https://picsum.photos/700/400?random=1",
+      image: "./blogspaze_logo.png",
     };
 
     addPost(newPost); // update local posts (works even before JSON Server)
@@ -35,7 +35,7 @@ const Write = ({ addPost }) => {
     setTimeout(() => {
       setPopup(false);
       navigate("/");
-    }, 3000);
+    }, 2000);
   };
 
   return (
