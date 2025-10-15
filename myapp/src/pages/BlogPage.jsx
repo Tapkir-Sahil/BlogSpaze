@@ -8,32 +8,23 @@ const BlogPage = () => {
   const [blog, setBlog] = useState(null);
 
   useEffect(() => {
-    // Fetch blogs from localStorage
-    const blogs = JSON.parse(localStorage.getItem("blogs")) || [];
-    const found = blogs.find((b) => b.id === Number(id));
-    setBlog(found);
+    fetch(`http://localhost:5000/blogs/${id}`)
+      .then((res) => res.json())
+      .then((data) => setBlog(data))
+      .catch((err) => console.log("Error fetching blog:", err));
   }, [id]);
 
   if (!blog) {
-    return (
-      <div className="blogpage-container">
-        <p className="blog-not-found">Blog not found 😢</p>
-      </div>
-    );
+    return <p className="blog-not-found">Blog not found 😢</p>;
   }
 
   return (
     <div className="blogpage-container">
-      {/* Blog Header */}
       <div className="blog-header">
         <h1 className="blog-title">{blog.title}</h1>
         <p className="blog-desc">{blog.description}</p>
         <div className="blog-meta">
-          <img
-            src="/blogspaze_logo.png"
-            alt="Author"
-            className="author-img"
-          />
+          <img src="/blogspaze_logo.png" alt="Author" className="author-img" />
           <div>
             <p className="author-name">{blog.author}</p>
             <p className="blog-date">🗓️ {blog.date}</p>
@@ -41,17 +32,14 @@ const BlogPage = () => {
         </div>
       </div>
 
-      {/* Blog Image */}
       <div className="blog-image-container">
         <img src={blog.image} alt={blog.title} className="blog-main-image" />
       </div>
 
-      {/* Blog Content */}
       <div className="blog-content">
         <p>{blog.content}</p>
       </div>
 
-      {/* Action Buttons */}
       <div className="blog-actions">
         <button className="back-btn" onClick={() => navigate("/")}>
           ← Back to Home

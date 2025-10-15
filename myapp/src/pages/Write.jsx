@@ -26,16 +26,21 @@ const Write = ({ addPost }) => {
       image: "./blogspaze_logo.png",
     };
 
-    addPost(newPost); // update local posts (works even before JSON Server)
+    fetch("http://localhost:5000/blogs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newPost),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setPopup(true);
+        setTimeout(() => {
+          setPopup(false);
+          navigate("/");
+        }, 3000);
+      })
+      .catch((err) => console.log("Error posting blog:", err));
 
-    // show popup
-    setPopup(true);
-
-    // redirect after 3 seconds
-    setTimeout(() => {
-      setPopup(false);
-      navigate("/");
-    }, 2000);
   };
 
   return (

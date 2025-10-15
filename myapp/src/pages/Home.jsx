@@ -6,13 +6,12 @@ const Home = ({ posts = [] }) => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    if (posts.length > 0) {
-      setBlogs(posts);
-    } else {
-      const storedBlogs = JSON.parse(localStorage.getItem("blogs")) || [];
-      setBlogs(storedBlogs);
-    }
-  }, [posts]);
+    fetch("http://localhost:5000/blogs")
+      .then((res) => res.json())
+      .then((data) => setBlogs(data))
+      .catch((err) => console.log("Error loading blogs:", err));
+  }, []);
+
 
 
   return (
