@@ -7,7 +7,7 @@ const ProfileHeader = () => {
       <div className="d-flex align-items-center">
         {/* Profile Picture */}
         <img
-          src="/profile-pic.jpg"
+          src="/blogspaze_logo.png"
           alt="User"
           className="rounded-circle me-3"
           style={{ width: "80px", height: "80px", objectFit: "cover" }}
@@ -15,11 +15,11 @@ const ProfileHeader = () => {
 
         <div>
           {/* Name */}
-          <h4 className="fw-bold mb-1">Tom Holland</h4>
+          <h4 className="fw-bold mb-1">Sahil Tapkir</h4>
 
           {/* Bio */}
           <p className="text-muted mb-1" style={{ fontStyle: "italic" }}>
-            "With a Great Power Comes With Great Responsibility"
+            "Master Of My Own Destiny"
           </p>
 
           {/* Edit Profile */}

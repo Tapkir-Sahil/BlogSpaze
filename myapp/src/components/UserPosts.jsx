@@ -7,7 +7,7 @@ const UserPosts = () => {
       title: "Which Is The Best Programming Language",
       description:
         "There are multiple programming languages in the market. Which one is better, how to choose?",
-      image: "/post-thumbnail.jpg",
+      image: "/blogspaze_logo.png",
       views: "1.8k",
       likes: 523,
       comments: 56,
@@ -17,7 +17,7 @@ const UserPosts = () => {
       title: "Which Is The Best Programming Language",
       description:
         "There are multiple programming languages in the market. Which one is better, how to choose?",
-      image: "/post-thumbnail.jpg",
+      image: "/blogspaze_logo.png",
       views: "1.8k",
       likes: 523,
       comments: 56,

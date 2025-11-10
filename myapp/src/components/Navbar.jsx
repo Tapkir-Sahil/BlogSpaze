@@ -81,12 +81,12 @@ const Navbar = () => {
           <ul className="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
             <li>
               <Link className="dropdown-item d-flex align-items-center" to="/profile"> 
-                <i className="bi bi-person me-2"></i> Profile
+                <i className="bi bi-person me-2"></i> Your Post
               </Link>
             </li>
             <li>
-              <Link className="dropdown-item d-flex align-items-center" to="/profile"> 
-                <i className="bi bi-person me-2"></i> Your Post
+              <Link className="dropdown-item d-flex align-items-center" to="/editprofile"> 
+                <i className="bi bi-person me-2"></i> Profile
               </Link>
             </li>
             <li><hr className="dropdown-divider" /></li>

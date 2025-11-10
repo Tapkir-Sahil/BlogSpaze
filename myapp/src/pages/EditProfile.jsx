@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const EditProfile = () => {
-  const [name, setName] = useState("Tom Holland");
+  const [name, setName] = useState("Sahil Tapkir");
   const [bio, setBio] = useState(
-    "With a Great Power Comes With Great Responsibility"
+    "Master Of My Own Destiny"
   );
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,7 +25,7 @@ const EditProfile = () => {
         {/* Profile Image Upload */}
         <div className="mb-3 text-center">
           <img
-            src="/profile-pic.jpg"
+            src="/blogspaze_logo.png"
             alt="Profile"
             className="rounded-circle mb-2"
             style={{ width: "100px", height: "100px", objectFit: "cover" }}
