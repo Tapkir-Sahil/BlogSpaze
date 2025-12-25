@@ -1,9 +1,13 @@
 import express from "express";
 import { register, login, getProfile } from "../controllers/auth.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
+import multer from "multer";
 
 const router = express.Router();
 
-router.post("/register",register);
-router.post("/login",login);
-router.get("/me",authMiddleware,getProfile);
+// simple register/login (profile avatar upload done via user route)
+router.post("/register", register);
+router.post("/login", login);
+router.get("/me", authMiddleware, getProfile);
+
+export default router;
