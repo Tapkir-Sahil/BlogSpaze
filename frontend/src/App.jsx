@@ -8,6 +8,7 @@ import Write from "./pages/Write";
 import BlogPage from "./pages/BlogPage";
 import Footer from "./components/Footer";
 import { useState, useEffect } from "react";
+import Landing from "./pages/landing";
 
 function App() {
   // load initial posts from localStorage
@@ -30,6 +31,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home posts={posts} />} />
+        <Route path="/landing" element={<Landing/>} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/writeblog" element={<Write addPost={addPost} />} />
