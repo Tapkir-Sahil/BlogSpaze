@@ -9,7 +9,7 @@ const Landing = () => {
         {/* LEFT IMAGE */}
         <div className="col-lg-6 order-2 order-lg-1 text-center mb-4 mb-lg-0">
           <img
-            src="/typography-illustration.png" 
+            src="typography-illustration.png" 
             alt="Blogspaze Illustration"
             className="img-fluid"
             style={{ maxHeight: "420px" }}
