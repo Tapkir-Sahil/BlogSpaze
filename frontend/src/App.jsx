@@ -12,15 +12,10 @@ import PublicNavbar from "./components/PublicNavbar";
 import PrivateNabar from "./components/PrivateNavbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
-  const [isAuth , setIsAuth] = useState(false);
-
-  useEffect(()=>{
-    const token = localStorage.getItem('token');
-    setIsAuth(!!token);
-  },[]);
-
+  const {isAuth} = useAuth();
   return (
     <Router>
       {/* Navbar Switch */}
@@ -28,8 +23,8 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing/>} />
-        <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
-        <Route path="/register" element={<Register setIsAuth={setIsAuth} />} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
 
         {/* Private Routes */}
         <Route path="/home" element={<Home/>} />

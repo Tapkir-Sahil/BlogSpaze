@@ -1,40 +1,35 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { loginUser } from "../services/authApi";
+import { Link, useNavigate } from "react-router-dom";
+import API from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setLoading(true); //start loading
 
     try {
-      const res = await loginUser(form);
+      const res = await API.post("/api/auth/login", form);
 
-      // Save token
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      // Redirect
-      navigate("/");
+      login(res.data.token);
+      navigate("/home");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
+      setLoading(false);  // Stop loading if passwords don't match
+      setError(err.response?.data?.message || "Invalid credentials");
     }
   };
 

@@ -1,51 +1,47 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import API from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);  // Add loading state
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);  // Start loading when submitting
 
-    const { name, email, password, confirmPassword } = formData;
-
-    if (password !== confirmPassword) {
+    if (form.password !== form.confirmPassword) {
+      setLoading(false);  // Stop loading if passwords don't match
       return setError("Passwords do not match");
     }
 
     try {
-      setLoading(true);
+      const res = await API.post("/api/auth/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
 
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        { name, email, password }
-      );
-
-      // auto login after register (optional but recommended)
-      localStorage.setItem("token", res.data.token);
-
-      navigate("/");
+      login(res.data.token);
+      navigate("/home");
     } catch (err) {
+      setLoading(false);  // Stop loading if there is an error
       setError(err.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -80,7 +76,7 @@ const Register = () => {
               name="name"
               className="form-control"
               placeholder="Your name"
-              value={formData.name}
+              value={form.name}
               onChange={handleChange}
               required
             />
@@ -93,7 +89,7 @@ const Register = () => {
               name="email"
               className="form-control"
               placeholder="abc@xyz.com"
-              value={formData.email}
+              value={form.email}
               onChange={handleChange}
               required
             />
@@ -106,7 +102,7 @@ const Register = () => {
               name="password"
               className="form-control"
               placeholder="********"
-              value={formData.password}
+              value={form.password}
               onChange={handleChange}
               required
             />
@@ -119,7 +115,7 @@ const Register = () => {
               name="confirmPassword"
               className="form-control"
               placeholder="********"
-              value={formData.confirmPassword}
+              value={form.confirmPassword}
               onChange={handleChange}
               required
             />
@@ -128,7 +124,7 @@ const Register = () => {
           <button
             type="submit"
             className="btn btn-dark w-100"
-            disabled={loading}
+            disabled={loading}  // Disable the button when loading
           >
             {loading ? "Signing up..." : "Sign up"}
           </button>
