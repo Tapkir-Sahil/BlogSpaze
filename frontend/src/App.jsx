@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import Landing from "./pages/landing";
 import PublicNavbar from "./components/PublicNavbar";
 import PrivateNabar from "./components/PrivateNavbar";
+import Login from "./pages/Login";
 
 function App() {
   const [isAuth , setIsAuth] = useState(false);
@@ -27,7 +28,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<Landing/>} />
         <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
-        <Route path="/register" element={<Register setIsAuth={setIsAuth} />} />
+        {/* <Route path="/register" element={<Register setIsAuth={setIsAuth} />} /> */}
 
         {/* Private Routes */}
         <Route path="/home" element={<Home/>} />
