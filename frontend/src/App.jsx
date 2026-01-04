@@ -5,7 +5,7 @@ import EditProfile from "./pages/EditProfile";
 import Write from "./pages/Write";
 import BlogPage from "./pages/BlogPage";
 import Footer from "./components/Footer";
-import Landing from "./pages/Landing";
+import Landing from "./pages/landing";
 import PublicNavbar from "./components/PublicNavbar";
 import PrivateNavbar from "./components/PrivateNavbar";
 import Login from "./pages/Login";
