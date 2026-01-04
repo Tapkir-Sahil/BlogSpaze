@@ -1,38 +1,78 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfile from "./pages/EditProfile";
 import Write from "./pages/Write";
 import BlogPage from "./pages/BlogPage";
 import Footer from "./components/Footer";
-import Landing from "./pages/landing";
+import Landing from "./pages/Landing";
 import PublicNavbar from "./components/PublicNavbar";
-import PrivateNabar from "./components/PrivateNavbar";
+import PrivateNavbar from "./components/PrivateNavbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useAuth } from "./context/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
-  const {isAuth} = useAuth();
+  const { isAuth } = useAuth();
+
   return (
     <Router>
-      {/* Navbar Switch */}
-      {isAuth ? <PrivateNabar/> : <PublicNavbar/>}
+      {/* Navbar */}
+      {isAuth ? <PrivateNavbar /> : <PublicNavbar />}
+
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Landing/>} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register/>} />
+        <Route
+          path="/"
+          element={isAuth ? <Navigate to="/home" /> : <Landing />}
+        />
+        <Route path="/login" element={isAuth ? <Navigate to="/home" /> : <Login />} />
+        <Route path="/register" element={isAuth ? <Navigate to="/home" /> : <Register />} />
 
-        {/* Private Routes */}
-        <Route path="/home" element={<Home/>} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/writeblog" element={<Write/>} />
-        <Route path="/blog/:id" element={<BlogPage/>} />
+        {/* Protected Routes */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editprofile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/writeblog"
+          element={
+            <ProtectedRoute>
+              <Write />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/blog/:id"
+          element={
+            <ProtectedRoute>
+              <BlogPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+
       <Footer />
     </Router>
   );

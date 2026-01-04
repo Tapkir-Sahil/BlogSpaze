@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../services/authApi";
 import "./Write.css";
 
-const Write = ({ addPost }) => {
+const Write = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [content, setContent] = useState("");
@@ -10,101 +11,69 @@ const Write = ({ addPost }) => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // create new post object
-    const newPost = {
-      id: Date.now(),
+  try {
+    await API.post("/blogs", {
       title,
       description: desc,
       content,
-      author: "Sahil Tapkir",
-      date: new Date().toLocaleDateString(),
-      likes: 0,
-      comments: 0,
       image: "./blogspaze_logo.png",
-    };
+    });
 
-    fetch("http://localhost:5000/blogs", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newPost),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setPopup(true);
-        setTimeout(() => {
-          setPopup(false);
-          navigate("/");
-        }, 3000);
-      })
-      .catch((err) => console.log("Error posting blog:", err));
+    setPopup(true);
 
-  };
+    setTimeout(() => {
+      setPopup(false);
+      navigate("/home");
+    }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    alert("Login required to write a blog");
+    navigate("/login");
+  }
+};
+
 
   return (
     <div className="write-page">
       <form className="write-container" onSubmit={handleSubmit}>
-        <div className="write-inputs">
-          <input
-            type="text"
-            placeholder="Title"
-            className="write-title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Description"
-            className="write-desc"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-            required
-          />
-          <textarea
-            className="write-textarea"
-            placeholder="Convey those emotions and thoughts..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Title"
+          className="write-title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
 
-        <div className="write-toolbar">
-          <button type="button" className="icon-btn">
-            <b>B</b>
-          </button>
-          <button type="button" className="icon-btn">
-            <i>I</i>
-          </button>
-          <button type="button" className="icon-btn">
-            <u>U</u>
-          </button>
-          <button type="button" className="icon-btn">“ ”</button>
-          <button type="button" className="icon-btn">🖼️</button>
-          <button type="button" className="icon-btn">🔗</button>
-          <button type="button" className="icon-btn">🎙️</button>
-        </div>
+        <input
+          type="text"
+          placeholder="Description"
+          className="write-desc"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          required
+        />
+
+        <br />
+        <textarea
+          className="write-textarea"
+          placeholder="Convey those emotions and thoughts..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
+        />
 
         <div className="write-actions">
           <button type="submit" className="submit-btn">Submit</button>
-          <button
-            type="button"
-            className="cancel-btn"
-            onClick={() => navigate("/")}
-          >
-            Cancel
-          </button>
+          <button type="button" onClick={() => navigate("/")}>Cancel</button>
         </div>
       </form>
 
-      {popup && (
-        <div className="popup">
-          <p>✅ Blog Posted</p>
-        </div>
-      )}
+      {popup && <div className="popup">✅ Blog Posted</div>}
     </div>
   );
 };
