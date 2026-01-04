@@ -6,7 +6,7 @@ dotenv.config();
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const header = req.header.authorization;
+    const header = req.headers.authorization;
     if (!header) {
       return res.status(401).json({ message: "Authorization Is Missing" })
     }
@@ -34,7 +34,7 @@ export const adminMiddleware = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ message: "Not Authenticated" });
   }
-  if (req.user.role !== admin) {
+  if (req.user.role !== "admin") {
     return res.status(403).json({ message: "Admin Only" });
   }
   next();
