@@ -1,89 +1,46 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
-const maskEmail = (email) => {
-  if (!email) return "";
-  const [name, domain] = email.split("@");
-  if (name.length <= 2) return email;
-
-  return (
-    name[0] +
-    "*".repeat(name.length - 2) +
-    name[name.length - 1] +
-    "@" +
-    domain
-  );
-};
 
 const PrivateNavbar = () => {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
-  const { logout } = useAuth();          // 🔥
-  const navigate = useNavigate();        // 🔥
+  const { user, logout } = useAuth();   // ✅ get user here
+  const navigate = useNavigate();
 
-  // TEMP: read email (later we’ll fetch from backend)
-  const email = localStorage.getItem("email"); // 🔥
-
-  const handleLogout = () => {            // 🔥
+  const handleLogout = () => {
     logout();
     navigate("/");
   };
 
+  // ✅ simple utility function (NO hooks here)
+  const maskEmail = (email) => {
+    if (!email) return "";
+    const [name, domain] = email.split("@");
+    return name.slice(0, 2) + "********@" + domain;
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3">
-      {/* Brand Logo */}
-      <Link className="navbar-brand d-flex align-items-center flex-shrink-0" to="/home">
+      {/* Brand */}
+      <Link className="navbar-brand d-flex align-items-center" to="/home">
         <img
           src="/blogspaze-high-resolution-logo-grayscale-transparent.png"
           alt="Blogspaze Logo"
-          className="me-2"
-          style={{ height: "35px", maxHeight: "8vw" }}
+          style={{ height: "35px" }}
         />
       </Link>
 
-      <div className="d-flex align-items-center ms-auto gap-2 flex-shrink-0 flex-nowrap">
-        {/* Desktop Search */}
-        <form className="d-none d-md-flex mb-0">
-          <input
-            type="text"
-            className="form-control"
-            placeholder='Search "Blogspaze"'
-            style={{ width: "200px" }}
-          />
-        </form>
-
-        {/* Mobile Search */}
-        <div className="d-flex align-items-center d-md-none">
-          {!showMobileSearch ? (
-            <button
-              className="btn btn-outline-dark"
-              onClick={() => setShowMobileSearch(true)}
-            >
-              <i className="bi bi-search"></i>
-            </button>
-          ) : (
-            <div className="d-flex align-items-center flex-nowrap">
-              <input
-                type="text"
-                className="form-control me-2"
-                placeholder="Search..."
-                style={{ width: "130px" }}
-              />
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => setShowMobileSearch(false)}
-              >
-                <i className="bi bi-x"></i>
-              </button>
-            </div>
-          )}
-        </div>
-
+      <div className="d-flex align-items-center ms-auto gap-3">
+        <a className="nav-link text-dark" href="#features">
+          Features
+        </a>
+        <a className="nav-link text-dark" href="#contact">
+          Contact team
+        </a>
         {/* Write */}
-        <Link to="/writeblog" className="btn btn-outline-dark me-1">
+        <Link to="/writeblog" className="btn btn-outline-dark">
           <i className="bi bi-pencil"></i>
         </Link>
 
@@ -91,7 +48,6 @@ const PrivateNavbar = () => {
         <div className="dropdown">
           <button
             className="btn border-0 p-0 dropdown-toggle"
-            type="button"
             data-bs-toggle="dropdown"
           >
             <img
@@ -120,14 +76,14 @@ const PrivateNavbar = () => {
             <li>
               <button
                 className="dropdown-item text-danger"
-                onClick={handleLogout}   // 🔥
+                onClick={handleLogout}
               >
                 <i className="bi bi-box-arrow-right me-2"></i> Sign out
               </button>
             </li>
 
             <li className="dropdown-item text-muted small">
-              {maskEmail(email)}        {/* 🔥 */}
+              {maskEmail(user?.email)}
             </li>
           </ul>
         </div>

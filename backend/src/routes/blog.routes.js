@@ -6,6 +6,7 @@ import {
   getBlog,
   updateBlog,
   deleteBlog,
+  getMyBlogs,
 } from "../controllers/blog.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 
@@ -18,6 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get("/", listBlogs);
+router.get("/my-posts", authMiddleware, getMyBlogs);
 router.get("/:id", getBlog);
 router.post("/", authMiddleware, upload.single("image"), createBlog);
 router.put("/:id", authMiddleware, upload.single("image"), updateBlog);

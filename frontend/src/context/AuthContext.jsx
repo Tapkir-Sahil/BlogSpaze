@@ -1,34 +1,30 @@
-import { createContext, useContext, useState, useEffect } from "react";
+// context/AuthContext.jsx
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(!!localStorage.getItem("token"));
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
 
-  // ✅ check token safely on app load
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token && token !== "undefined" && token !== "null") {
-      setIsAuth(true);
-    } else {
-      setIsAuth(false);
-      localStorage.removeItem("token");
-    }
-  }, []);
-
-  const login = (token) => {
+  const login = (token, userData) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
     setIsAuth(true);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
     setIsAuth(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, login, logout }}>
+    <AuthContext.Provider value={{ isAuth, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

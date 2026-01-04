@@ -6,13 +6,14 @@ import { useAuth } from "../context/AuthContext";
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [loading, setLoading] = useState(false)
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-
-  const [error, setError] = useState("");
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,16 +21,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true); //start loading
+    setLoading(true);
 
     try {
       const res = await API.post("/api/auth/login", form);
 
-      login(res.data.token);
+      // 🔥 IMPORTANT CHANGE
+      login(res.data.token, res.data.user);
+
       navigate("/home");
     } catch (err) {
-      setLoading(false);  // Stop loading if passwords don't match
       setError(err.response?.data?.message || "Invalid credentials");
+      setLoading(false);
     }
   };
 

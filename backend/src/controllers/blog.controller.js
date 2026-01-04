@@ -72,7 +72,7 @@ export const updateBlog = async (req, res) => {
 
     //only author or admin can update
     if (
-      blog.authorId.toString() !== req.user_id.toString() &&
+      blog.authorId.toString() !== req.user._id.toString() &&
       req.user.role !== "admin"
     ) {
       return res.status(403).json({ message: "not authorized" });
@@ -109,7 +109,7 @@ export const deleteBlog = async (req, res) => {
     }
 
     if (
-      blog.authorId.toString() !== req.user_id.toString() &&
+      blog.authorId.toString() !== req.user._id.toString() &&
       req.user.role !== "admin"
     ) {
       return res.status(403).json({ message: "not authorized" });
@@ -120,5 +120,18 @@ export const deleteBlog = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "server error" });
+  }
+};
+
+// get logged-in user's blogs
+export const getMyBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find({ authorId: req.user._id })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(blogs);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "internal server error" });
   }
 };

@@ -1,32 +1,55 @@
-import React from "react"; 
-import "bootstrap-icons/font/bootstrap-icons.css"; 
+import { Link } from "react-router-dom";
 
-const BlogCard = ({ author, title, desc, img, views, likes, comments }) => { 
+const BlogCard = ({ blog }) => {
   return (
-  <div className="border-bottom py-3"> 
-  <div className="row align-items-center"> {/* Left side: text */} 
-    <div className="col-12 col-md-8"> <div className="d-flex align-items-center mb-2"> 
-      <img src="/blogspaze_logo.png" alt="Author" className="rounded-circle me-2" style={{ width: "30px", height: "30px" }} /> 
-      <small className="text-muted">{author}</small> 
-    </div> 
-      <h5 className="fw-bold">{title}</h5>
-      <p className="text-muted">{desc}</p> 
-    <div className="d-flex gap-3 text-muted small"> 
-      <span><i className="bi bi-eye"></i> {views}</span> 
-      <span><i className="bi bi-heart"></i> {likes}</span> 
-      <span><i className="bi bi-chat"></i> {comments}</span> 
-    </div> <div className="d-flex gap-3 mt-2"> 
-      <i className="bi bi-hand-thumbs-up"></i> 
-      <i className="bi bi-chat"></i> 
-    </div> 
-  </div> 
-  {/* Right side: image */} 
-  <div className="col-12 col-md-4 text-md-end mt-3 mt-md-0"> 
-    <img src={img} alt="Blog" className="img-fluid rounded" style={{ maxHeight: "120px", objectFit: "cover" }} /> 
-    </div> 
-    </div> 
-    </div>
-);
-}; 
+    <Link
+      to={`/blog/${blog._id}`}
+      className="text-decoration-none text-dark"
+    >
+      <div className="card mb-3 shadow-sm">
+        <div className="row g-0">
+
+          {/* Image */}
+          <div className="col-md-4">
+            <img
+              src={blog.image || "/blogspaze_logo.png"}
+              className="img-fluid rounded-start"
+              alt="blog"
+              style={{
+                height: "120px",       // 🔥 fixed height
+                width: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="col-md-8">
+            <div className="card-body py-2 px-3"> {/* 🔥 less padding */}
+              <h6 className="fw-bold mb-1">{blog.title}</h6>
+
+              <p
+                className="card-text text-muted small mb-1"
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,     // 🔥 2 lines only
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
+              >
+                {blog.description}
+              </p>
+
+              <span className="text-muted small">
+                ✍ {blog.authorId?.name}
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </Link>
+  );
+};
 
 export default BlogCard;

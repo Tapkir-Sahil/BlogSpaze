@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 
 const PublicNavbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg bg-white border-bottom px-3">
-      <Link className="navbar-brand fw-bold" to="/">
-        Blogspaze
+    <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3">
+      {/* Brand */}
+      <Link className="navbar-brand d-flex align-items-center" to="/">
+        <img
+          src="/blogspaze-high-resolution-logo-grayscale-transparent.png"
+          alt="Blogspaze Logo"
+          style={{ height: "35px" }}
+        />
       </Link>
 
       <div className="ms-auto d-flex gap-3 align-items-center">

@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfile from "./pages/EditProfile";
 import Write from "./pages/Write";
-import BlogPage from "./pages/BlogPage";
 import Footer from "./components/Footer";
 import Landing from "./pages/landing";
 import PublicNavbar from "./components/PublicNavbar";
@@ -12,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import SingleBlog from "./pages/SingleBlog";
 
 function App() {
   const { isAuth } = useAuth();
@@ -67,7 +67,7 @@ function App() {
           path="/blog/:id"
           element={
             <ProtectedRoute>
-              <BlogPage />
+              <SingleBlog />
             </ProtectedRoute>
           }
         />
