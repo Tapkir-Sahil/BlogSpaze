@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import { useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SingleBlog from "./pages/SingleBlog";
+import EditBlog from "./pages/EditBlog";
 
 function App() {
   const { isAuth } = useAuth();
@@ -71,6 +72,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/edit-blog/:id" element={<EditBlog />} />
       </Routes>
 
       <Footer />

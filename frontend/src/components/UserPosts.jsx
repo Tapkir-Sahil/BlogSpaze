@@ -22,6 +22,18 @@ const UserPosts = () => {
     fetchUserPosts();
   }, []);
 
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
+    if (!confirmDelete) return;
+
+    try {
+      await API.delete(`/api/blogs/${id}`);
+      setPosts((prev) => prev.filter((post) => post._id !== id));
+    } catch (err) {
+      alert("Failed to delete blog");
+    }
+  };
+
   if (loading) {
     return <p className="text-center text-muted">Loading your posts...</p>;
   }
@@ -51,15 +63,8 @@ const UserPosts = () => {
       {posts.map((post) => (
         <PostCard
           key={post._id}
-          post={{
-            id: post._id,
-            title: post.title,
-            description: post.description,
-            image: post.image || "/blogspaze_logo.png",
-            views: post.views || 0,
-            likes: post.likes?.length || 0,
-            comments: post.comments?.length || 0,
-          }}
+          post={post}
+          onDelete={handleDelete}
         />
       ))}
     </div>

@@ -1,64 +1,67 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, onDelete }) => {
+  const navigate = useNavigate();
+
   return (
-    <Link
-      to={`/blog/${post._id || post.id}`}
-      className="text-decoration-none text-dark"
-    >
-      <div className="card border-0 border-bottom mb-3 pb-3">
-        <div className="d-flex">
-          {/* Left: Post Content */}
-          <div className="flex-grow-1">
-            <div className="d-flex justify-content-between">
-              <h6 className="fw-bold">{post.title}</h6>
+    <div className="card border-0 border-bottom mb-3 pb-3">
+      <div className="d-flex">
 
-              {/* Three dots (stop navigation when clicked) */}
+        {/* Left */}
+        <div className="flex-grow-1">
+          <div className="d-flex justify-content-between align-items-start">
+            <h6 className="fw-bold">{post.title}</h6>
+
+            {/* Three dots */}
+            <div className="dropdown">
               <button
                 className="btn btn-light border-0 p-0"
-                onClick={(e) => e.preventDefault()}
+                data-bs-toggle="dropdown"
               >
                 <i className="bi bi-three-dots-vertical"></i>
               </button>
-            </div>
 
-            <p className="text-muted small mb-2">
-              {post.description}
-            </p>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => navigate(`/edit-blog/${post._id}`)}
+                  >
+                    <i className="bi bi-pencil me-2"></i>Edit
+                  </button>
+                </li>
 
-            {/* Meta Info */}
-            <div className="d-flex text-muted small gap-3">
-              <span>
-                <i className="bi bi-eye me-1"></i>
-                {post.views || 0}
-              </span>
-              <span>
-                <i className="bi bi-hand-thumbs-up me-1"></i>
-                {post.likes || 0}
-              </span>
-              <span>
-                <i className="bi bi-chat me-1"></i>
-                {post.comments || 0}
-              </span>
+                <li>
+                  <button
+                    className="dropdown-item text-danger"
+                    onClick={() => onDelete(post._id)}
+                  >
+                    <i className="bi bi-trash me-2"></i>Delete
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
 
-          {/* Right: Thumbnail */}
-          {post.image && (
-            <img
-              src={post.image}
-              alt="Post"
-              className="ms-3 rounded"
-              style={{
-                width: "160px",
-                height: "100px",
-                objectFit: "cover",
-              }}
-            />
-          )}
+          <p className="text-muted small mb-2">{post.description}</p>
+
+          <div className="d-flex text-muted small gap-3">
+            <span><i className="bi bi-eye me-1"></i>{post.views || 0}</span>
+            <span><i className="bi bi-heart me-1"></i>{post.likes?.length || 0}</span>
+            <span><i className="bi bi-chat me-1"></i>{post.comments?.length || 0}</span>
+          </div>
         </div>
+
+        {/* Right */}
+        <img
+          src={post.image || "/blogspaze_logo.png"}
+          alt="Post"
+          className="ms-3 rounded"
+          style={{ width: "160px", height: "100px", objectFit: "cover" }}
+        />
       </div>
-    </Link>
+    </div>
   );
 };
 
