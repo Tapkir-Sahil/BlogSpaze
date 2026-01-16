@@ -5,6 +5,7 @@ import {
   getUser,
   updateUser,
   deleteUser,
+  getMe
 } from "../controllers/user.controller.js";
 import {
   authMiddleware,
@@ -20,6 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+router.get("/me", authMiddleware, getMe);
 router.get("/", authMiddleware, adminMiddleware, listUser);
 router.get("/:id", authMiddleware, getUser);
 router.put("/:id", authMiddleware, upload.single("avatar"), updateUser);

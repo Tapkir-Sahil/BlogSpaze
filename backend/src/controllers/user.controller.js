@@ -1,6 +1,17 @@
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.js";
 
+// GET /api/users/me
+export const getMe = async (req, res) => {
+  try {
+    res.json(req.user); // req.user comes from authMiddleware
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "internal server error" });
+  }
+};
+
+
 // GET /api/user/ (admin)
 export const listUser = async (req, res) => {
   try {
@@ -19,6 +30,7 @@ export const getUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "user not found" });
     }
+    res.json(user);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "internal server error" });
