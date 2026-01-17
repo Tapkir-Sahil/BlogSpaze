@@ -4,6 +4,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 const PostCard = ({ post, onDelete }) => {
   const navigate = useNavigate();
 
+  // 🔹 Open blog
+  const openBlog = () => {
+    navigate(`/blog/${post._id}`);
+  };
+
   return (
     <div className="card border-0 border-bottom mb-3 pb-3">
       <div className="d-flex">
@@ -11,10 +16,21 @@ const PostCard = ({ post, onDelete }) => {
         {/* Left */}
         <div className="flex-grow-1">
           <div className="d-flex justify-content-between align-items-start">
-            <h6 className="fw-bold">{post.title}</h6>
+            
+            {/* Clickable title */}
+            <h6
+              className="fw-bold cursor-pointer"
+              style={{ cursor: "pointer" }}
+              onClick={openBlog}
+            >
+              {post.title}
+            </h6>
 
             {/* Three dots */}
-            <div className="dropdown">
+            <div
+              className="dropdown"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 className="btn btn-light border-0 p-0"
                 data-bs-toggle="dropdown"
@@ -44,7 +60,14 @@ const PostCard = ({ post, onDelete }) => {
             </div>
           </div>
 
-          <p className="text-muted small mb-2">{post.description}</p>
+          {/* Clickable description */}
+          <p
+            className="text-muted small mb-2"
+            style={{ cursor: "pointer" }}
+            onClick={openBlog}
+          >
+            {post.description}
+          </p>
 
           <div className="d-flex text-muted small gap-3">
             <span><i className="bi bi-eye me-1"></i>{post.views || 0}</span>
@@ -53,12 +76,13 @@ const PostCard = ({ post, onDelete }) => {
           </div>
         </div>
 
-        {/* Right */}
+        {/* Right image (clickable) */}
         <img
           src={post.image || "/blogspaze_logo.png"}
           alt="Post"
           className="ms-3 rounded"
-          style={{ width: "160px", height: "100px", objectFit: "cover" }}
+          style={{ width: "160px", height: "100px", objectFit: "cover", cursor: "pointer" }}
+          onClick={openBlog}
         />
       </div>
     </div>

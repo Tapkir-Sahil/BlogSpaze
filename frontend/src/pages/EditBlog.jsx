@@ -6,28 +6,24 @@ const EditBlog = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    image: "",
-  });
-
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
 
-  // Fetch existing blog
+  // 🔹 Fetch blog
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         const res = await API.get(`/api/blogs/${id}`);
-        setFormData({
-          title: res.data.title,
-          description: res.data.description,
-          image: res.data.image || "",
-        });
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+        setContent(res.data.content);
+        setPreview(res.data.image);
       } catch (err) {
-        setError("Failed to load blog");
+        alert("Failed to load blog");
       } finally {
         setLoading(false);
       }
@@ -36,100 +32,105 @@ const EditBlog = () => {
     fetchBlog();
   }, [id]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-
-    try {
-      await API.put(`/api/blogs/${id}`, formData);
-      navigate("/profile"); // or /your-posts
-    } catch (err) {
-      alert("Failed to update blog");
-    } finally {
-      setSaving(false);
+  // 🔹 Image preview
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    if (file) {
+      setPreview(URL.createObjectURL(file));
     }
   };
 
-  if (loading) {
-    return <p className="text-center text-muted">Loading blog...</p>;
-  }
+  // 🔹 Submit update
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (error) {
-    return <p className="text-center text-danger">{error}</p>;
-  }
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("content", content);
+      if (image) formData.append("image", image);
+
+      await API.put(`/api/blogs/${id}`, formData);
+
+      alert("Blog updated successfully");
+      navigate(`/profile`);
+    } catch (err) {
+      alert("Failed to update blog");
+    }
+  };
+
+  if (loading) return <p className="text-center mt-5">Loading blog...</p>;
 
   return (
-    <div className="container mt-4" style={{ maxWidth: "700px" }}>
-      <h4 className="fw-bold mb-3">Edit Blog</h4>
+    <div className="container mt-4" style={{ maxWidth: "800px" }}>
+      <h3 className="fw-bold mb-4">Edit Blog</h3>
 
       <form onSubmit={handleSubmit}>
+        {/* Image */}
+        <div className="mb-3 text-center">
+          {preview && (
+            <img
+              src={preview}
+              alt="Preview"
+              className="img-fluid rounded mb-2"
+              style={{ maxHeight: "250px", objectFit: "cover" }}
+            />
+          )}
+          <input
+            type="file"
+            className="form-control"
+            onChange={handleImageChange}
+          />
+        </div>
+
         {/* Title */}
         <div className="mb-3">
-          <label className="form-label fw-semibold">Title</label>
+          <label className="form-label fw-medium">Title</label>
           <input
             type="text"
             className="form-control"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
 
         {/* Description */}
         <div className="mb-3">
-          <label className="form-label fw-semibold">Description</label>
+          <label className="form-label fw-medium">Description</label>
           <textarea
             className="form-control"
-            rows="6"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
+            rows="2"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        {/* Content */}
+        <div className="mb-4">
+          <label className="form-label fw-medium">Blog Content</label>
+          <textarea
+            className="form-control"
+            rows="8"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             required
           />
         </div>
 
-        {/* Image */}
-        <div className="mb-3">
-          <label className="form-label fw-semibold">Image URL</label>
-          <input
-            type="text"
-            className="form-control"
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Preview */}
-        {formData.image && (
-          <img
-            src={formData.image}
-            alt="Preview"
-            className="img-fluid rounded mb-3"
-          />
-        )}
-
         {/* Buttons */}
-        <div className="d-flex gap-2">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={saving}
-          >
-            {saving ? "Updating..." : "Update Blog"}
-          </button>
-
+        <div className="d-flex justify-content-between">
           <button
             type="button"
-            className="btn btn-outline-secondary"
+            className="btn btn-warning"
             onClick={() => navigate(-1)}
           >
             Cancel
+          </button>
+          <button type="submit" className="btn btn-success px-4">
+            Update Blog
           </button>
         </div>
       </form>
