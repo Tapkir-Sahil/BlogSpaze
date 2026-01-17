@@ -51,7 +51,7 @@ const PrivateNavbar = () => {
             data-bs-toggle="dropdown"
           >
             <img
-              src="/blogspaze_logo.png"
+              src={user.profilePic || "/blogspaze_logo.png"}
               alt="Profile"
               className="rounded-circle"
               style={{ width: "40px", height: "40px" }}

@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const { user, login } = useAuth();
 
   const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
-  const [avatar, setAvatar] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
+  const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(true);
 
   // 🔹 Fetch logged-in user
@@ -19,6 +22,7 @@ const EditProfile = () => {
         setUserId(res.data._id);
         setName(res.data.name || "");
         setBio(res.data.bio || "");
+        setPreview(res.data.profilePic || "");
       } catch (err) {
         console.error(err);
         alert("Failed to load profile");
@@ -33,13 +37,21 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!userId) {
+      alert("User not loaded yet");
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("bio", bio);
-      if (avatar) formData.append("avatar", avatar);
+      if (profilePic) formData.append("profilePic", profilePic);
 
-      await API.put(`/api/users/${userId}`, formData);
+      const res = await API.put(`/api/users/${userId}`, formData);
+
+      // 🔥 update auth context + localStorage
+      login(localStorage.getItem("token"), res.data);
 
       alert("Profile updated successfully");
       navigate("/profile");
@@ -57,11 +69,11 @@ const EditProfile = () => {
     <div className="container mt-5" style={{ maxWidth: "600px" }}>
       <h3 className="fw-bold mb-4">Edit Profile</h3>
 
-      <form onSubmit={handleSubmit}>
-        {/* Avatar */}
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
+        {/* Profile Image */}
         <div className="mb-3 text-center">
           <img
-            src="/blogspaze_logo.png"
+            src={preview || "/blogspaze_logo.png"}
             alt="Profile"
             className="rounded-circle mb-2"
             style={{ width: "100px", height: "100px", objectFit: "cover" }}
@@ -69,7 +81,11 @@ const EditProfile = () => {
           <input
             type="file"
             className="form-control mt-2"
-            onChange={(e) => setAvatar(e.target.files[0])}
+            accept="image/*"
+            onChange={(e) => {
+              setProfilePic(e.target.files[0]);
+              setPreview(URL.createObjectURL(e.target.files[0]));
+            }}
           />
         </div>
 
@@ -111,3 +127,4 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
+  

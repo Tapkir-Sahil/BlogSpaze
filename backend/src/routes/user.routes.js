@@ -24,7 +24,7 @@ const upload = multer({ storage });
 router.get("/me", authMiddleware, getMe);
 router.get("/", authMiddleware, adminMiddleware, listUser);
 router.get("/:id", authMiddleware, getUser);
-router.put("/:id", authMiddleware, upload.single("avatar"), updateUser);
+router.put("/:id", authMiddleware, upload.single("profilePic"), updateUser);
 router.delete("/:id", authMiddleware, adminMiddleware, deleteUser);
 
 export default router;

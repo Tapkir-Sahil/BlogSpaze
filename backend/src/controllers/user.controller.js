@@ -47,11 +47,11 @@ export const updateUser = async (req, res) => {
     //if file is uploaded by multer(req.file) upload it to cloudinary
     if (req.file && req.file.path) {
       const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "blogspaze/avatar",
+        folder: "blogspaze/profile",
       });
-      update.profilepic = result.secure_url;
-    } else if (req.body.profilepic) {
-      update.profilepic = req.body.profilepic;
+      update.profilePic = result.secure_url;
+    } else if (req.body.profilePic) {
+      update.profilePic = req.body.profilePic;
     }
 
     const user = await User.findByIdAndUpdate(req.params.id, update, {
