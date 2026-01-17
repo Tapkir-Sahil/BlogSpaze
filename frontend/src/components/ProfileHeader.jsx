@@ -56,11 +56,6 @@ const ProfileHeader = () => {
           </Link>
         </div>
       </div>
-
-      {/* Right Side Menu */}
-      <button className="btn btn-light border-0">
-        <i className="bi bi-three-dots-vertical"></i>
-      </button>
     </div>
   );
 };

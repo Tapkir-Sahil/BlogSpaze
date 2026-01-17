@@ -1,28 +1,64 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import API from "../api/axios";
 
 const EditProfile = () => {
-  const [name, setName] = useState("Sahil Tapkir");
-  const [bio, setBio] = useState(
-    "Master Of My Own Destiny"
-  );
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [userId, setUserId] = useState("");
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 🔹 Fetch logged-in user
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await API.get("/api/users/me");
+        setUserId(res.data._id);
+        setName(res.data.name || "");
+        setBio(res.data.bio || "");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load profile");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("bio", bio);
+      if (avatar) formData.append("avatar", avatar);
+
+      await API.put(`/api/users/${userId}`, formData);
+
+      alert("Profile updated successfully");
+      navigate("/profile");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update profile");
     }
-    alert("Profile updated successfully!");
   };
+
+  if (loading) {
+    return <p className="text-center mt-5">Loading profile...</p>;
+  }
 
   return (
     <div className="container mt-5" style={{ maxWidth: "600px" }}>
       <h3 className="fw-bold mb-4">Edit Profile</h3>
+
       <form onSubmit={handleSubmit}>
-        {/* Profile Image Upload */}
+        {/* Avatar */}
         <div className="mb-3 text-center">
           <img
             src="/blogspaze_logo.png"
@@ -30,9 +66,11 @@ const EditProfile = () => {
             className="rounded-circle mb-2"
             style={{ width: "100px", height: "100px", objectFit: "cover" }}
           />
-          <div>
-            <input type="file" className="form-control mt-2" />
-          </div>
+          <input
+            type="file"
+            className="form-control mt-2"
+            onChange={(e) => setAvatar(e.target.files[0])}
+          />
         </div>
 
         {/* Name */}
@@ -43,6 +81,7 @@ const EditProfile = () => {
             className="form-control"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
 
@@ -57,34 +96,11 @@ const EditProfile = () => {
           ></textarea>
         </div>
 
-        {/* Password */}
-        <div className="mb-3">
-          <label className="form-label fw-medium">New Password</label>
-          <input
-            type="password"
-            className="form-control"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter new password"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label fw-medium">Confirm Password</label>
-          <input
-            type="password"
-            className="form-control"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm new password"
-          />
-        </div>
-
-        {/* Action Buttons */}
+        {/* Buttons */}
         <div className="d-flex justify-content-between mt-4">
-            <Link to="/profile" className="btn btn-warning" style={{textDecoration : 'none'}}>
-              Cancel
-            </Link>
+          <Link to="/profile" className="btn btn-warning">
+            Cancel
+          </Link>
           <button type="submit" className="btn btn-success px-4">
             Save Changes
           </button>
