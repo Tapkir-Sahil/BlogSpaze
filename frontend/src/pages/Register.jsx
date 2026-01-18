@@ -15,19 +15,21 @@ const Register = () => {
   });
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);  // Add loading state
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);  // Start loading when submitting
+    setLoading(true);
 
     if (form.password !== form.confirmPassword) {
-      setLoading(false);  // Stop loading if passwords don't match
-      return setError("Passwords do not match");
+      setLoading(false);
+      setError("Passwords do not match");
+      return;
     }
 
     try {
@@ -37,10 +39,13 @@ const Register = () => {
         password: form.password,
       });
 
+      // ✅ Login immediately after register
       login(res.data.token);
+
+      setLoading(false);
       navigate("/home");
     } catch (err) {
-      setLoading(false);  // Stop loading if there is an error
+      setLoading(false);
       setError(err.response?.data?.message || "Registration failed");
     }
   };
@@ -57,16 +62,16 @@ const Register = () => {
       <div className="card shadow-lg p-4" style={{ maxWidth: "420px", width: "100%" }}>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h3 className="fw-bold mb-0">Blogspaze</h3>
-          <Link to="/" className="text-muted text-decoration-none fs-4">×</Link>
+          <Link to="/" className="text-muted text-decoration-none fs-4">
+            ×
+          </Link>
         </div>
 
         <p className="text-muted mb-4">
           Show the world your emotions in words.
         </p>
 
-        {error && (
-          <div className="alert alert-danger py-2">{error}</div>
-        )}
+        {error && <div className="alert alert-danger py-2">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -75,7 +80,6 @@ const Register = () => {
               type="text"
               name="name"
               className="form-control"
-              placeholder="Your name"
               value={form.name}
               onChange={handleChange}
               required
@@ -88,7 +92,6 @@ const Register = () => {
               type="email"
               name="email"
               className="form-control"
-              placeholder="abc@xyz.com"
               value={form.email}
               onChange={handleChange}
               required
@@ -101,7 +104,6 @@ const Register = () => {
               type="password"
               name="password"
               className="form-control"
-              placeholder="********"
               value={form.password}
               onChange={handleChange}
               required
@@ -114,7 +116,6 @@ const Register = () => {
               type="password"
               name="confirmPassword"
               className="form-control"
-              placeholder="********"
               value={form.confirmPassword}
               onChange={handleChange}
               required
@@ -124,7 +125,7 @@ const Register = () => {
           <button
             type="submit"
             className="btn btn-dark w-100"
-            disabled={loading}  // Disable the button when loading
+            disabled={loading}
           >
             {loading ? "Signing up..." : "Sign up"}
           </button>

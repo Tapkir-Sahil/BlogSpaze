@@ -2,19 +2,19 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-
 const PrivateNavbar = () => {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
-
-  const { user, logout } = useAuth();   // ✅ get user here
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  // ⛔ Prevent crash when user is null (after logout / refresh)
+  // if (!user) return null;
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
 
-  // ✅ simple utility function (NO hooks here)
   const maskEmail = (email) => {
     if (!email) return "";
     const [name, domain] = email.split("@");
@@ -39,6 +39,7 @@ const PrivateNavbar = () => {
         <a className="nav-link text-dark" href="#contact">
           Contact team
         </a>
+
         {/* Write */}
         <Link to="/writeblog" className="btn btn-outline-dark">
           <i className="bi bi-pencil"></i>
@@ -51,7 +52,7 @@ const PrivateNavbar = () => {
             data-bs-toggle="dropdown"
           >
             <img
-              src={user.profilePic || "/blogspaze_logo.png"}
+              src={user?.profilePic || "/blogspaze_logo.png"}
               alt="Profile"
               className="rounded-circle"
               style={{ width: "40px", height: "40px" }}
@@ -71,7 +72,9 @@ const PrivateNavbar = () => {
               </Link>
             </li>
 
-            <li><hr className="dropdown-divider" /></li>
+            <li>
+              <hr className="dropdown-divider" />
+            </li>
 
             <li>
               <button
