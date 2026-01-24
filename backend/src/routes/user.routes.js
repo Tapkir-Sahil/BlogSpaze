@@ -5,7 +5,7 @@ import {
   getUser,
   updateUser,
   deleteUser,
-  getMe
+  getMe,
 } from "../controllers/user.controller.js";
 import {
   authMiddleware,
@@ -14,17 +14,28 @@ import {
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "public/uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+/**
+ * ✅ Memory storage (Render safe)
+ */
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
-
-const upload = multer({ storage });
 
 router.get("/me", authMiddleware, getMe);
 router.get("/", authMiddleware, adminMiddleware, listUser);
 router.get("/:id", authMiddleware, getUser);
-router.put("/:id", authMiddleware, upload.single("profilePic"), updateUser);
+
+/**
+ * profilePic must match frontend FormData key
+ */
+router.put(
+  "/:id",
+  authMiddleware,
+  upload.single("profilePic"),
+  updateUser
+);
+
 router.delete("/:id", authMiddleware, adminMiddleware, deleteUser);
 
 export default router;

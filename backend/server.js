@@ -1,50 +1,63 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
-import fs from "fs";
 
 // Project Imports
 import { connectDB } from "./db.js";
 import { createDefaultAdmin } from "./src/utils/createDefaultAdmin.js";
-import authRoutes from './src/routes/auth.routes.js';
-import userRoutes from './src/routes/user.routes.js';
-import blogRoutes from './src/routes/blog.routes.js';
+import authRoutes from "./src/routes/auth.routes.js";
+import userRoutes from "./src/routes/user.routes.js";
+import blogRoutes from "./src/routes/blog.routes.js";
 
-dotenv.config()
+dotenv.config();
 
 const app = express();
 
-//Middlewares
+/* =======================
+   MIDDLEWARES
+======================= */
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://blog-spaze.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 
-//Ensure public/uploads folder exists
+/* =======================
+   DATABASE + INIT
+======================= */
 
-const uploadsDir = path.join(process.cwd(), "public","uploads");
-if(!fs.existsSync(uploadsDir)){
-  fs.mkdirSync(uploadsDir)
-}
-
-// Connect to mongodb, and start then start server
 await connectDB();
-// creating default admin
 await createDefaultAdmin();
 
-// Routes for app;
-app.use("/api/auth",authRoutes);
-app.use("/api/users",userRoutes);
-app.use("/api/blogs",blogRoutes);
+/* =======================
+   ROUTES
+======================= */
 
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/blogs", blogRoutes);
 
-//Health check of server and start server
-app.get('/',(req,res)=>{
-  res.send('server is running')
-})
+/* =======================
+   HEALTH CHECK
+======================= */
+
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
+});
+
+/* =======================
+   START SERVER
+======================= */
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT,()=>{
-  console.log(`server is running on http://localhost:${PORT}`)
-})
-
+app.listen(PORT, () => {
+  console.log(`Server running on port http://localhost:${PORT}`);
+});
