@@ -9,7 +9,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await API.get("/blogs");
+        const res = await API.get("/api/blogs");
         setBlogs(res.data);
       } catch (err) {
         console.log(err);
