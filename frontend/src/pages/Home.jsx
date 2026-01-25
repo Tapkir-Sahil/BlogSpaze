@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
-import API from "../services/authApi";
+import API from "../api/axios.js";
 import "./Home.css";
 
 const Home = () => {
