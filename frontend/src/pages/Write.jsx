@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../services/authApi";
+import API from "../api/axios.js";
 import "./Write.css";
 
 const Write = () => {
