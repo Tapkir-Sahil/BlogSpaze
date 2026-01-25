@@ -36,7 +36,7 @@ const Write = () => {
         formData.append("image", image);
       }
 
-      await API.post("/blogs", formData, {
+      await API.post("/api/blogs", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
