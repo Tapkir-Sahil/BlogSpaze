@@ -33,12 +33,12 @@ const PrivateNavbar = () => {
       </Link>
 
       <div className="d-flex align-items-center ms-auto gap-3">
-        <a className="nav-link text-dark" href="/home">
+        <Link className="nav-link text-dark" to="/home">
           Home
-        </a>
-        <a className="nav-link text-dark" href="#features">
+        </Link>
+        <Link className="nav-link text-dark" to="#features">
           Features
-        </a>
+        </Link>
         
 
         {/* Write */}
