@@ -26,9 +26,7 @@ const Login = () => {
     try {
       const res = await API.post("/api/auth/login", form);
 
-      // 🔥 IMPORTANT CHANGE
       login(res.data.token, res.data.user);
-
       navigate("/home");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
@@ -37,8 +35,18 @@ const Login = () => {
   };
 
   return (
-    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
-      <div className="card shadow-lg p-4" style={{ maxWidth: "420px", width: "100%" }}>
+    <div
+      className="min-vh-100 d-flex align-items-center justify-content-center"
+      style={{
+        backgroundImage: "url('/typography-illustration.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div
+        className="card shadow-lg p-4"
+        style={{ maxWidth: "420px", width: "100%" }}
+      >
         <div className="text-center mb-3">
           <h2 className="fw-bold">Blogspaze</h2>
           <p className="text-muted small">

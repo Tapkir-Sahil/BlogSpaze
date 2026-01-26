@@ -10,6 +10,7 @@ const Write = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [popup, setPopup] = useState(false);
+  const [loading, setLoading] = useState(false); // ✅ NEW
 
   const navigate = useNavigate();
 
@@ -25,6 +26,9 @@ const Write = () => {
   // SUBMIT BLOG
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return; // 🛑 prevent double publish
+
+    setLoading(true);
 
     try {
       const formData = new FormData();
@@ -48,11 +52,12 @@ const Write = () => {
         setPopup(false);
         navigate("/home");
       }, 1200);
-
     } catch (err) {
       console.error(err);
       alert("Login required to write a blog");
       navigate("/login");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,6 +80,7 @@ const Write = () => {
             accept="image/*"
             hidden
             onChange={handleImageChange}
+            disabled={loading}
           />
         </label>
 
@@ -87,6 +93,7 @@ const Write = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            disabled={loading}
           />
 
           <input
@@ -96,6 +103,7 @@ const Write = () => {
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
             required
+            disabled={loading}
           />
 
           <textarea
@@ -104,18 +112,25 @@ const Write = () => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
 
         {/* ACTIONS */}
         <div className="write-actions">
-          <button type="submit" className="submit-btn">
-            Publish
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={loading}
+          >
+            {loading ? "Publishing..." : "Publish"}
           </button>
+
           <button
             type="button"
             className="cancel-btn"
             onClick={() => navigate("/home")}
+            disabled={loading}
           >
             Cancel
           </button>
@@ -123,6 +138,16 @@ const Write = () => {
       </form>
 
       {popup && <div className="popup">✅ Blog Posted</div>}
+
+      {/* FULLSCREEN LOADER */}
+      {loading && (
+        <div className="publish-overlay">
+          <div className="publish-loader">
+            <div className="spinner"></div>
+            <p>Uploading & Publishing blog…</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

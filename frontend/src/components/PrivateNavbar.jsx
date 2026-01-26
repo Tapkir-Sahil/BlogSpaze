@@ -33,12 +33,13 @@ const PrivateNavbar = () => {
       </Link>
 
       <div className="d-flex align-items-center ms-auto gap-3">
+        <a className="nav-link text-dark" href="/home">
+          Home
+        </a>
         <a className="nav-link text-dark" href="#features">
           Features
         </a>
-        <a className="nav-link text-dark" href="#contact">
-          Contact team
-        </a>
+        
 
         {/* Write */}
         <Link to="/writeblog" className="btn btn-outline-dark">

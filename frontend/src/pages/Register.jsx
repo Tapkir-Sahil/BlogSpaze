@@ -23,6 +23,8 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return; // 🛑 prevent double submit
+
     setError("");
     setLoading(true);
 
@@ -39,14 +41,12 @@ const Register = () => {
         password: form.password,
       });
 
-      // ✅ Login immediately after register
+      // existing logic untouched
       login(res.data.token);
-
-      setLoading(false);
       navigate("/home");
     } catch (err) {
-      setLoading(false);
       setError(err.response?.data?.message || "Registration failed");
+      setLoading(false);
     }
   };
 
@@ -59,7 +59,10 @@ const Register = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="card shadow-lg p-4" style={{ maxWidth: "420px", width: "100%" }}>
+      <div
+        className="card shadow-lg p-4"
+        style={{ maxWidth: "420px", width: "100%" }}
+      >
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h3 className="fw-bold mb-0">Blogspaze</h3>
           <Link to="/" className="text-muted text-decoration-none fs-4">
@@ -83,6 +86,7 @@ const Register = () => {
               value={form.name}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -95,6 +99,7 @@ const Register = () => {
               value={form.email}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -107,6 +112,7 @@ const Register = () => {
               value={form.password}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
@@ -119,14 +125,22 @@ const Register = () => {
               value={form.confirmPassword}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
 
           <button
             type="submit"
-            className="btn btn-dark w-100"
+            className="btn btn-dark w-100 d-flex align-items-center justify-content-center gap-2"
             disabled={loading}
           >
+            {loading && (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
             {loading ? "Signing up..." : "Sign up"}
           </button>
         </form>
